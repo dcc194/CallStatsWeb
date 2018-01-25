@@ -1,4 +1,53 @@
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+Content-type: text/html
+
+
+
+    <h1>Charts with Python and Javascript</h1>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi">
+</script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+    ['Date', 'Count'],
+    ['0', 9],
+['1', 4],
+['2', 3],
+['3', 3],
+['4', 5],
+['5', 4],
+['6', 9],
+['7', 13],
+['8', 8],
+['9', 21],
+['10', 21],
+['11', 12],
+['12', 17],
+['13', 18],
+['14', 15],
+['15', 10],
+['16', 21],
+['17', 23],
+['18', 9],
+['19', 9],
+['20', 7],
+['21', 9],
+['23', 2] 
+        ]);
+
+        var options = {
+          title: 'Google column chart',
+          hAxis: {title: 'Date', titleTextStyle: {color: 'blue'}},
+          vAxis: {title: 'Count', titleTextStyle: {color: 'blue'}}
+        };
+
+        var chart = new google.visualization.ColumnChart
+                (document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+    <div id="chart_div"></div>
+
+    </body>
