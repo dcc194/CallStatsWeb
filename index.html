@@ -2,52 +2,74 @@ Content-type: text/html
 
 
 
-    <h1>Charts with Python and Javascript</h1>
+    <h1>Montomgery County Incident Stats</h1>
 
     <script type="text/javascript" src="https://www.google.com/jsapi">
 </script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
+      google.setOnLoadCallback(drawDailyHistoryChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-    ['Date', 'Count'],
-    ['0', 9],
-['1', 4],
-['2', 3],
-['3', 3],
-['4', 5],
-['5', 4],
-['6', 9],
-['7', 13],
-['8', 8],
-['9', 21],
-['10', 21],
-['11', 12],
-['12', 17],
-['13', 18],
-['14', 15],
-['15', 10],
-['16', 21],
-['17', 23],
-['18', 9],
-['19', 9],
-['20', 7],
-['21', 9],
-['23', 2] 
+    ['Time', 'EMS', 'Fire'],
+    ['0', 6, 3],
+['1', 4, 0],
+['2', 3, 0],
+['3', 2, 1],
+['4', 4, 1],
+['5', 2, 2],
+['6', 6, 3],
+['7', 10, 3],
+['8', 7, 1],
+['9', 13, 8],
+['10', 15, 6],
+['11', 9, 3],
+['12', 14, 3],
+['13', 13, 5],
+['14', 12, 3],
+['15', 9, 1],
+['16', 16, 5],
+['17', 18, 5],
+['18', 8, 1],
+['19', 8, 1],
+['20', 6, 1],
+['21', 9, 0],
+['22', 0, 1],
+['23', 2, 0]
         ]);
 
         var options = {
-          title: 'Google column chart',
-          hAxis: {title: 'Date', titleTextStyle: {color: 'blue'}},
-          vAxis: {title: 'Count', titleTextStyle: {color: 'blue'}}
+          title: 'Incidents in the past 24 hours',
+          curveType: 'function',
+          hAxis: {title: 'Hour of day', titleTextStyle: {color: 'blue'}},
+          vAxis: {title: 'Number of Incidents', titleTextStyle: {color: 'blue'}}
         };
 
-        var chart = new google.visualization.ColumnChart
-                (document.getElementById('chart_div'));
-        chart.draw(data, options);
+        var lineChart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        lineChart.draw(data, options);
       }
+
+       function drawDailyHistoryChart() {
+        var data = google.visualization.arrayToDataTable([
+    ['Day', 'EMS', 'Fire'],
+    ['0', 130, 30],
+['1', 135, 34],
+['2', 128, 29]
+        ]);
+
+        var options = {
+          title: 'Incidents in the past 24 hours',
+          hAxis: {title: 'Hour of day', titleTextStyle: {color: 'blue'}},
+          vAxis: {title: 'Number of Incidents', titleTextStyle: {color: 'blue'}}
+        };
+
+        var dailyCounts = new google.visualization.ColumnChart(document.getElementById('daily_hist_div'));
+        dailyCounts.draw(data, options);
+      }
+
     </script>
     <div id="chart_div"></div>
+    <div id="daily_hist_div"></div>
 
     </body>

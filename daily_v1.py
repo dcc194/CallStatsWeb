@@ -4,8 +4,6 @@ import cgi
 import cgitb
 import json
 
-from os import listdir
-from os.path import isfile, join
 
 #from dateutil import parser
 #from datetime import timedelta
@@ -54,29 +52,6 @@ def print_table(filename,delimiter):
 
     return result
 
-def print_histTable():
-    #get files (oldest to newest}
-    onlyfiles = [f for f in listdir('../daily') if isfile(join('../daily', f))]
-    #print(onlyfiles)
-    result = ""
-
-    count = 0
-    for i in sorted(onlyfiles):
-        with open('../daily/' + i, "r+") as myfile:
-            # read dict
-            dict = json.load(myfile)
-            result += "['" + i[:-4] + "', " + str(dict['ems']) + ", " + str(dict['fire']) + "],\n"
-        count = count + 1
-        if count >= 7:
-            break
-
-    #print(result)
-    result = result[:-2]
-    #print(result)
-        # result += "['0', 130, 30],\n"
-        # result += "['1', 135, 34],\n"
-        # result += "['2', 128, 29]"
-    return result
 # print an HTTP header
 #
 def printHTTPheader():
@@ -96,48 +71,29 @@ def main():
     <script type="text/javascript" src="https://www.google.com/jsapi">
 </script>
     <script type="text/javascript">
-      google.load("visualization", "1", {{packages:["corechart"]}});
+      google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
-      google.setOnLoadCallback(drawDailyHistoryChart);
-      function drawChart() {{
+      function drawChart() {
         var data = google.visualization.arrayToDataTable([
     ['Time', 'EMS', 'Fire'],
-    {0}
+    %s
         ]);
 
-        var options = {{
+        var options = {
           title: 'Incidents in the past 24 hours',
           curveType: 'function',
-          hAxis: {{title: 'Hour of day', titleTextStyle: {{color: 'blue'}}}},
-          vAxis: {{title: 'Number of Incidents', titleTextStyle: {{color: 'blue'}}}}
-        }};
+          hAxis: {title: 'Hour of day', titleTextStyle: {color: 'blue'}},
+          vAxis: {title: 'Number of Incidents', titleTextStyle: {color: 'blue'}}
+        };
 
-        var lineChart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        lineChart.draw(data, options);
-      }}
-      
-       function drawDailyHistoryChart() {{
-        var data = google.visualization.arrayToDataTable([
-    ['Day', 'EMS', 'Fire'],
-    {1}
-        ]);
-
-        var options = {{
-          title: 'Incidents in the past several days',
-          hAxis: {{title: 'Day', titleTextStyle: {{color: 'blue'}}}},
-          vAxis: {{title: 'Number of Incidents', titleTextStyle: {{color: 'blue'}}}}
-        }};
-
-        var dailyCounts = new google.visualization.ColumnChart(document.getElementById('daily_hist_div'));
-        dailyCounts.draw(data, options);
-      }}
-      
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
     </script>
     <div id="chart_div"></div>
-    <div id="daily_hist_div"></div>
 
     </body>
-    """.format(print_table('../hour/24HrHistory.txt', ';'), print_histTable())
+    """ % print_table('../hour/24HrHistory.txt', ';')
 
     # serve the page with the data table embedded in it
     print page_str
